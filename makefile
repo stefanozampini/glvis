@@ -213,8 +213,7 @@ $(OBJECT_FILES): override MFEM_DIR = $(MFEM_DIR2)
 $(OBJECT_FILES): $(HEADER_FILES) $(CONFIG_MK)
 
 lib/libglvis.a: $(OBJECT_FILES)
-	cd lib;	$(AR) $(ARFLAGS) libglvis.a *.o;
-	$(RANLIB) libglvis.a
+	cd lib;	$(AR) $(ARFLAGS) libglvis.a *.o; $(RANLIB) libglvis.a
 
 clean:
 	rm -rf lib/*.o lib/*~ *~ glvis lib/libglvis.a *.dSYM
