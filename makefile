@@ -55,7 +55,7 @@ ARFLAGS ?= cruv
 RANLIB ?= ranlib
 
 # Use the MFEM build directory
-MFEM_DIR ?= ./mfem
+MFEM_DIR ?= ../mfem
 CONFIG_MK ?= $(MFEM_DIR)/config/config.mk
 # Use the MFEM install directory
 # MFEM_DIR = ../mfem/mfem
