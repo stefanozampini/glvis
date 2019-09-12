@@ -21,6 +21,7 @@ using namespace std;
 #include "vsdata.hpp"
 #include "aux_vis.hpp"
 #include "material.hpp"
+#include "palettes.hpp"
 
 #include "gl2ps.h"
 
@@ -544,8 +545,8 @@ void VisualizationSceneScalarData::DrawCaption()
       caption += " (" + extra_caption + ")";
    }
 
-   int width = 0, height = 0;
 #ifdef GLVIS_USE_FREETYPE
+   int width = 0, height = 0;
    RenderBitmapText(caption.c_str(), width, height);
 #endif
 
@@ -809,10 +810,6 @@ void KeyRPressed()
    SendExposeEvent();
 }
 
-void Next_RGB_Palette();
-void Prev_RGB_Palette();
-int Select_New_RGB_Palette();
-
 void KeypPressed(GLenum state)
 {
    if (state & ControlMask)
@@ -858,7 +855,6 @@ static void KeyF5Pressed()
    SendExposeEvent();
 }
 
-extern int RepeatPaletteTimes;
 void KeyF6Pressed()
 {
    cout << "Palette is repeated " << RepeatPaletteTimes << " times.\n"
@@ -883,18 +879,7 @@ void KeyF6Pressed()
 
 void KeyF7Pressed(GLenum state)
 {
-   if (state == 0)
-   {
-      cout << "[minv,maxv] = [" << vsdata->GetMinV() << "," << vsdata->GetMaxV()
-           << "]  maxv-minv = " << vsdata->GetMaxV()-vsdata->GetMinV() << "\n"
-           << "New value for minv: " << flush;
-      cin >> vsdata->GetMinV();
-      cout << "New value for maxv: " << flush;
-      cin >> vsdata->GetMaxV();
-      vsdata->UpdateValueRange(true);
-      SendExposeEvent();
-   }
-   else if (state & ShiftMask)
+   if (state & ShiftMask)
    {
       cout << "Current bounding box:\n"
            << "   min: (" << vsdata->x[0] << ',' << vsdata->y[0] << ','
@@ -920,6 +905,17 @@ void KeyF7Pressed(GLenum state)
            << "   max: (" << vsdata->x[1] << ',' << vsdata->y[1] << ','
            << vsdata->z[1] << ")\n" << flush;
       vsdata->UpdateBoundingBox();
+      SendExposeEvent();
+   }
+   else
+   {
+      cout << "[minv,maxv] = [" << vsdata->GetMinV() << "," << vsdata->GetMaxV()
+           << "]  maxv-minv = " << vsdata->GetMaxV()-vsdata->GetMinV() << "\n"
+           << "New value for minv: " << flush;
+      cin >> vsdata->GetMinV();
+      cout << "New value for maxv: " << flush;
+      cin >> vsdata->GetMaxV();
+      vsdata->UpdateValueRange(true);
       SendExposeEvent();
    }
 }

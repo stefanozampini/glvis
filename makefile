@@ -49,9 +49,14 @@ GLVIS_CONFIG_MK ?=
 PREFIX ?= ./bin
 INSTALL ?= /usr/bin/install
 
-# Archiver
-AR ?= ar
-ARFLAGS ?= cruv
+# Archiver: AR and ARFLAGS are defined by default, RANLIB is not.
+# The default value of AR is 'ar' and we do not want to change that.
+# The default value of ARFLAGS is 'rv', however, we want to set a different
+# default, so we modify ARFLAGS, unless it was already changed on the command
+# line or in the configuration file $(GLVIS_CONFIG_MK).
+ifeq ($(origin ARFLAGS),default)
+   ARFLAGS = cruv
+endif
 RANLIB ?= ranlib
 
 # Use the MFEM build directory
@@ -173,7 +178,7 @@ Ccc  = $(strip $(CC) $(CFLAGS) $(GL_OPTS))
 
 # generated with 'echo lib/*.c*'
 SOURCE_FILES = lib/aux_gl.cpp lib/aux_vis.cpp lib/gl2ps.c lib/material.cpp \
- lib/openglvis.cpp lib/threads.cpp lib/tk.cpp lib/vsdata.cpp \
+ lib/openglvis.cpp lib/palettes.cpp lib/threads.cpp lib/tk.cpp lib/vsdata.cpp \
  lib/vssolution3d.cpp lib/vssolution.cpp lib/vsvector3d.cpp lib/vsvector.cpp
 OBJECT_FILES1 = $(SOURCE_FILES:.cpp=.o)
 OBJECT_FILES = $(OBJECT_FILES1:.c=.o)
